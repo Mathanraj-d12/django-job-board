@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="card shadow-lg p-4" style="max-width:600px; margin:auto; border-radius:12px; background-color:#1e1e2f; color:#f1f1f1;">
+        
+        <!-- Job Details -->
+        <h3 style="color:#ffffff;">Apply for: {{ job.title }}</h3>
+        <p><strong>Company:</strong> {{ job.employer.username }}</p>
+        <p><strong>Location:</strong> {{ job.location }}</p>
+        <p style="color:#ccc;"><strong>Description :</strong> {{ job.description }}</p>
+
+        <!-- Application Form -->
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Name -->
+            <div class="mb-3">
+                <label for="id_name" class="form-label">Full Name</label>
+                <input type="text" name="name" id="id_name" required class="form-control"
+                    placeholder="Enter your full name"
+                    style="background-color:#ffffff; color:#000000; border:none;">
+            </div>
+
+            <!-- Degree -->
+            <div class="mb-3">
+                <label for="id_degree" class="form-label">Degree</label>
+                <input type="text" required name="degree" id="id_degree" class="form-control"
+                    placeholder="Enter your degree"
+                    style="background-color:#ffffff; color:#000000; border:none;">
+            </div>
+
+            <!-- Passout Year -->
+            <div class="mb-3">
+                <label for="id_passout" class="form-label">Passout Year</label>
+                <input required type="number" name="passout_year" id="id_passout" class="form-control"
+                    placeholder="Enter your passout year"
+                    style="background-color:#ffffff; color:#000000; border:none;">
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="mb-3">
+                <label for="id_dob" class="form-label">Date of Birth</label>
+                <input required type="date" name="dob" id="id_dob" class="form-control"
+                    style="background-color:#ffffff; color:#000000; border:none;">
+            </div>
+
+            <!-- Resume Upload -->
+            <div class="mb-3">
+                <label for="id_resume" class="form-label">Upload Resume</label>
+                <input required type="file" name="resume" id="id_resume" class="form-control"
+                    style="background-color:#78788d; color:#f1f1f1; border:none;">
+            </div>
+
+            <!-- Cover Letter -->
+            <div class="mb-3">
+                <label for="id_cover_letter" class="form-label">Cover Letter (optional)</label>
+                <textarea name="cover_letter" id="id_cover_letter" class="form-control"
+                    rows="5" placeholder="Write a cover letter...(Optional)" 
+                    style="background-color:#ffffff; color:#000000; border:none;"></textarea>
+            </div>
+
+            <button type="submit" class="btn w-100" style="background-color:#ffffff; color:#1e1e2f; font-weight:bold;">Submit</button>
+        </form>
+    </div>
+
+</div>
+
+<style>
+    textarea:focus, input:focus {
+        box-shadow: 0 0 5px #ffdd57;
+        outline: none;
+    }
+</style>
+{% endblock %}

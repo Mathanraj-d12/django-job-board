@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+    <h3 class="mb-4 text-light">📌 My Applications</h3>
+
+    {% for app in applications %}
+    <div class="card mb-4 shadow application-card">
+        <div class="card-body">
+
+            <!-- Job Info -->
+            <h5 class="job-title">{{ app.job.title }}</h5>
+            <p class="mb-1"><strong>Location:</strong> {{ app.job.location }}</p>
+            <p class="mb-2"><strong>Applied On:</strong> {{ app.applied_at|date:"d M Y" }}</p>
+
+            <!-- STATUS + ACTIONS -->
+            <div class="status-action-row mt-3">
+
+                <span class="status-badge status-{{ app.status|lower }}">
+                    {{ app.get_status_display }}
+                </span>
+
+                <div class="action-bar">
+                    {% if app.status == 'pending' %}
+                        <a href="{% url 'withdraw_application' app.job.id %}"
+                           class="btn btn-warning btn-sm action-btn">
+                            Withdraw
+                        </a>
+                    {% endif %}
+
+                    <a href="{% url 'delete_application' app.id %}"
+                       class="btn btn-danger btn-sm action-btn"
+                       onclick="return confirm('Are you sure you want to delete this application?');">
+                        Delete
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    {% empty %}
+        <div class="alert alert-warning text-center">
+            You have not applied for any jobs yet.
+        </div>
+    {% endfor %}
+</div>
+
+<!-- STYLES -->
+<style>
+/* Card */
+.application-card {
+    background: #1e1e2f;
+    color: #fff;
+    border-radius: 14px;
+    transition: all 0.3s ease;
+}
+.application-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+}
+
+/* Title */
+.job-title {
+    color: #ffdd57;
+    font-weight: 600;
+}
+
+/* Status + Actions in one line */
+.status-action-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* Status badge */
+.status-badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+/* Status colors */
+.status-pending {
+    background-color: #6c757d;   /* Grey */
+}
+
+.status-accepted {
+    background-color: #198754;   /* Green */
+}
+
+.status-rejected {
+    background-color: #dc3545;   /* RED */
+}
+
+/* Buttons */
+.action-btn {
+    min-width: 90px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+}
+</style>
+
+{% endblock %}

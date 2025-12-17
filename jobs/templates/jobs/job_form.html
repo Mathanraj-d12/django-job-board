@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5 pt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0">{{ title }}</h4>
+                </div>
+
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- JOB TITLE -->
+                        <div class="mb-3">
+                            <label for="id_title" class="form-label">Job Title</label>
+                            {{ form.title }}
+                            {% if form.title.errors %}
+                                <div class="text-danger">{{ form.title.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- JOB DESCRIPTION -->
+                        <div class="mb-3">
+                            <label for="id_description" class="form-label">Job Description</label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="text-danger">{{ form.description.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- LOCATION -->
+                        <div class="mb-3">
+                            <label for="id_location" class="form-label">Location</label>
+                            {{ form.location }}
+                            {% if form.location.errors %}
+                                <div class="text-danger">{{ form.location.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- EMPLOYMENT TYPE -->
+                        <div class="mb-3">
+                            <label for="id_employment_type" class="form-label">Employment Type</label>
+                            {{ form.employment_type }}
+                            {% if form.employment_type.errors %}
+                                <div class="text-danger">{{ form.employment_type.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- CATEGORY -->
+                        <div class="mb-3">
+                            <label for="id_category" class="form-label">Category</label>
+                            <select name="category" class="form-select" id="id_category" required>
+                                <option value="">-- Select Category --</option>
+                                <option value="Software Development" {% if form.instance.category == "Software Development" %}selected{% endif %}>Software Development</option>
+                                <option value="Data & Analytics" {% if form.instance.category == "Data & Analytics" %}selected{% endif %}>Data & Analytics</option>
+                                <option value="Design & UI" {% if form.instance.category == "Design & UI" %}selected{% endif %}>Design & UI</option>
+                                <option value="Marketing" {% if form.instance.category == "Marketing" %}selected{% endif %}>Marketing</option>
+                                <option value="Sales" {% if form.instance.category == "Sales" %}selected{% endif %}>Sales</option>
+                                <option value="Customer Support" {% if form.instance.category == "Customer Support" %}selected{% endif %}>Customer Support</option>
+                            </select>
+                        </div>
+
+                        <!-- SUBMIT -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">
+                                {% if title == "Post Job" %}Post Job{% else %}Update Job{% endif %}
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

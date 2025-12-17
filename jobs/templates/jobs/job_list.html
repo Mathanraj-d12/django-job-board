@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load dict_filters %}  
+{% block content %}
+<style>
+/* CATEGORY PILLS */
+.category-pill {
+    border-radius: 50px;
+    padding: 8px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-decoration: none;
+}
+.category-pill:hover,
+.category-pill.selected {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: #fff;
+}
+
+/* JOB CARD */
+.job-card {
+    background: #1f1f2e;
+    color: #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    margin-bottom: 25px;
+    padding: 25px;
+    transition: all 0.3s ease;
+}
+.job-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+}
+.job-card h5 {
+    color: #ffdd57;
+    font-weight: 600;
+    font-size: 1.4rem;
+}
+.job-card p {
+    margin-bottom: 5px;
+}
+.job-card .badge {
+    font-size: 0.9rem;
+    padding: 0.35em 0.6em;
+}
+
+/* STATUS AND WITHDRAW */
+.status-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.status-badge {
+    font-weight: 500;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #fff;
+}
+.status-pending { background-color: #6c757d; } /* gray */
+.status-accepted { background-color: #198754; } /* green */
+.status-rejected { background-color: #dc3545; } /* red */
+
+.btn-withdraw {
+    background-color: #ffc107;
+    color: #212529;
+    font-weight: 700;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    transition: 0.3s ease;
+    text-decoration: none;
+}
+.btn-withdraw:hover {
+    background-color: #e0a800;
+    color: #fff;
+}
+
+/* BUTTONS */
+.btn-apply { background-color: #198754; color: #fff; }
+.btn-apply:hover { background-color: #157347; }
+
+.btn-edit { background-color: #0d6efd; color: #fff; }
+.btn-edit:hover { background-color: #0b5ed7; }
+
+.btn-delete { background-color: #dc3545; color: #fff; }
+.btn-delete:hover { background-color: #bb2d3b; }
+
+/* PAGINATION */
+.pagination .page-link {
+    color: #e0e0e0;
+    background: rgba(255,255,255,0.1);
+    border: none;
+}
+.pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    color: #fff;
+    border-radius: 50%;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .job-card { padding: 20px; }
+}
+</style>
+
+<div class="container mt-5">
+
+    <!-- CATEGORY FILTER -->
+    <div class="mb-4 d-flex flex-wrap gap-2">
+        <a href="{% url 'job_list' %}" class="category-pill {% if not selected_category %}selected{% endif %}">All</a>
+        <a href="{% url 'job_list' %}?category=Software Development" class="category-pill {% if selected_category == 'Software Development' %}selected{% endif %}">Software Development</a>
+        <a href="{% url 'job_list' %}?category=Data & Analytics" class="category-pill {% if selected_category == 'Data & Analytics' %}selected{% endif %}">Data & Analytics</a>
+        <a href="{% url 'job_list' %}?category=Design & UI" class="category-pill {% if selected_category == 'Design & UI' %}selected{% endif %}">Design & UI</a>
+        <a href="{% url 'job_list' %}?category=Marketing" class="category-pill {% if selected_category == 'Marketing' %}selected{% endif %}">Marketing</a>
+        <a href="{% url 'job_list' %}?category=Sales" class="category-pill {% if selected_category == 'Sales' %}selected{% endif %}">Sales</a>
+        <a href="{% url 'job_list' %}?category=Customer Support" class="category-pill {% if selected_category == 'Customer Support' %}selected{% endif %}">Customer Support</a>
+    </div>
+
+    <!-- JOB CARDS -->
+    {% if jobs %}
+    <div class="row">
+        {% for job in jobs %}
+        <div class="col-md-6 col-lg-4">
+            <div class="job-card">
+                <h5>{{ job.title }}</h5>
+                <p><i class="bi bi-geo-alt-fill"></i> {{ job.location }}</p>
+                <p><i class="bi bi-clock-fill"></i> {{ job.get_employment_type_display }}</p>
+                <p><i class="bi bi-tags-fill"></i> {{ job.category }}</p>
+
+                {% if user.is_authenticated %}
+                    {% if user.profile.role == 'jobseeker' %}
+                        {% if job.id in applied_job_ids %}
+                            <div class="status-container">
+    {% with status=applied_job_ids|dict_get:job.id %}
+        <span class="status-badge status-{{ status }}">
+            {% if status == 'pending' %}Pending{% elif status == 'accepted' %}Accepted{% elif status == 'rejected' %}Rejected{% endif %}
+        </span>
+        {% if status == 'pending' %}
+        <a href="{% url 'withdraw_application' job.id %}" class="btn-withdraw">Withdraw</a>
+        {% endif %}
+    {% endwith %}
+</div>
+
+                        {% else %}
+                            <a href="{% url 'apply_job' job.id %}" class="btn btn-apply btn-sm mt-2">Apply Now</a>
+                        {% endif %}
+                    {% elif user.profile.role == 'employer' and job.employer == user %}
+                        <div class="mt-2 d-flex gap-2">
+                            <a href="{% url 'job_update' job.id %}" class="btn btn-edit btn-sm">Edit</a>
+                            <form method="POST" action="{% url 'job_delete' job.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-delete btn-sm">Delete</button>
+                            </form>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-apply btn-sm mt-2">Login to Apply</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="mt-4 d-flex justify-content-center">
+        <nav>
+            <ul class="pagination">
+                {% if jobs.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ jobs.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}">Prev</a>
+                </li>
+                {% endif %}
+
+                {% for num in jobs.paginator.page_range %}
+                <li class="page-item {% if jobs.number == num %}active{% endif %}">
+                    <a class="page-link" href="?page={{ num }}{% if selected_category %}&category={{ selected_category }}{% endif %}">{{ num }}</a>
+                </li>
+                {% endfor %}
+
+                {% if jobs.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ jobs.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}">Next</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+    {% else %}
+    <div class="alert alert-warning">No jobs found in this category.</div>
+    {% endif %}
+
+</div>
+{% endblock %}
