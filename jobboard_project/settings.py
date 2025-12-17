@@ -34,7 +34,9 @@ SECRET_KEY = os.environ.get(
     'unsafe-secret-key-for-local-only'
 )
 
-DEBUG = True
+# DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+
 
 
 ALLOWED_HOSTS = [
@@ -60,6 +62,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # 👈 move here
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -67,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'jobboard_project.urls'
 
@@ -117,8 +121,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files
-STATIC_URL = 'static/'
 
 # Email settings using environment variables (.env file)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -133,3 +135,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Media files
 MEDIA_URL = '/media/'                # standard media URL
 MEDIA_ROOT = BASE_DIR / 'media'      # store uploaded files in /media/
+
+# static files
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
