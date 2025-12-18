@@ -17,7 +17,17 @@
                 <p><strong>Degree:</strong> {{ app.degree }}</p>
                 <p><strong>Passout Year:</strong> {{ app.passout_year }}</p>
                 <p><strong>DOB:</strong> {{ app.dob }}</p>
-                <p><strong>Resume:</strong> <a href="{{ app.resume.url }}" target="_blank">View Resume</a></p>
+                {% if app.resume_link %}
+<p>
+    <strong>Resume:</strong>
+    <a href="{{ app.resume_link }}" target="_blank" class="text-info">
+        View Resume
+    </a>
+</p>
+{% else %}
+<p><strong>Resume:</strong> Not provided</p>
+{% endif %}
+
                 <p><strong>Applied On:</strong> {{ app.applied_at|date:"d M Y, h:i A" }}</p>
                 <hr style="border-color:#444;">
                 <p><strong>Cover Letter:</strong></p>

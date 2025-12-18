@@ -1,10 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-5">
+
+<div class="row justify-content-center ">
+    <div class="col-md-6">
         <div class="card shadow p-4">
             <h3 class="text-center mb-3">Login</h3>
+
+            <!-- Display error messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
 
             <form method="post">
                 {% csrf_token %}
@@ -24,11 +34,21 @@
                 </button>
             </form>
 
-            <p class="text-center mt-3">
-                Don’t have an account?
-                <a href="{% url 'register' %}">Register</a>
+            <p class="text-center text-secondary mt-3">
+                Don’t have an account? 
+                <a href="{% url 'register' %}">Create an account</a>
             </p>
         </div>
     </div>
 </div>
+
+<!-- Optional CSS to match register input focus style -->
+<style>
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+    border-color: #80bdff;
+}
+</style>
+
 {% endblock %}

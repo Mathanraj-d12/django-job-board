@@ -119,29 +119,12 @@ def apply_job(request, pk):
         return redirect('job_list')
 
     if request.method == 'POST':
-        form = JobApplicationForm(request.POST, request.FILES)
+        form = JobApplicationForm(request.POST)  # ✅ REMOVED request.FILES
         if form.is_valid():
             application = form.save(commit=False)
             application.job = job
             application.applicant = request.user.profile
             application.save()
-
-            # Email to employer
-            subject = f"New Application for {job.title}"
-            message = (
-                f"Hi {job.employer.username},\n\n"
-                f"{request.user.username} has applied for your job "
-                f"'{job.title}'.\n\n"
-                f"Please check your dashboard."
-            )
-
-            send_mail(
-                subject,
-                message,
-                settings.DEFAULT_FROM_EMAIL,
-                [job.employer.email],
-                fail_silently=True
-            )
 
             return redirect('job_list')
     else:
@@ -151,6 +134,7 @@ def apply_job(request, pk):
         'form': form,
         'job': job
     })
+
 
 # # =========================
 # # EMPLOYER: VIEW APPLICATIONS

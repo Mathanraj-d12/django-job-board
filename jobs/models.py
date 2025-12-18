@@ -33,24 +33,22 @@ class Job(models.Model):
 
 
 class JobApplication(models.Model):
-    STATUS_CHOICES = (
-        ('pending', 'Pending'),
-        ('accepted', 'Accepted'),
-        ('rejected', 'Rejected'),
-    )
-
-    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='applications')
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
     applicant = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     name = models.CharField(max_length=100)
     degree = models.CharField(max_length=100)
     passout_year = models.IntegerField()
     dob = models.DateField()
-    resume = models.FileField(upload_to='resumes/')
-    cover_letter = models.TextField(blank=True)
-    applied_at = models.DateTimeField(default=timezone.now)
 
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')  # ✅ new field
+    resume_link = models.URLField(blank=True)  # ✅ LINK INSTEAD OF FILE
+    cover_letter = models.TextField()
 
-    def __str__(self):
-        return f"{self.applicant.user.username} → {self.job.title} ({self.status})"
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+    ]
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    applied_at = models.DateTimeField(auto_now_add=True)
+

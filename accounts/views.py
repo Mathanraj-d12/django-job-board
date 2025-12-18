@@ -6,57 +6,11 @@ from django.contrib.auth import login
 from .forms import CustomUserCreationForm
 from .models import Profile
 from django import forms
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import AuthenticationForm
 
-
-# def     register_view(request):
-#     if request.method == 'POST':
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             login(request, user)
-#             return redirect('home')
-#     else:
-#         form = UserCreationForm()
-
-#     return render(request, 'accounts/register.html', {'form': form})
-
-
-# def register_view(request):
-#     if request.method == 'POST':
-#         form = UserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-#             login(request, user)
-#             return redirect('home')
-#     else:
-#         form = UserCreationForm()
-
-#     for field in form.fields.values():
-#         field.widget.attrs['class'] = 'form-control'
-
-#     return render(request, 'accounts/register.html', {'form': form})
-
-
-# def register_view(request):
-#     if request.method == 'POST':
-#         form = CustomUserCreationForm(request.POST)
-#         if form.is_valid():
-#             user = form.save(commit=False)
-#             user.save()
-
-#             role = form.cleaned_data.get('role')
-#             Profile.objects.create(user=user, role=role)
-
-#             login(request, user)
-#             return redirect('home')
-#     else:
-#         form = CustomUserCreationForm()
-
-#     for field in form.fields.values():
-#         if not isinstance(field.widget, forms.RadioSelect):
-#             field.widget.attrs['class'] = 'form-control'
-
-#     return render(request, 'accounts/register.html', {'form': form})
 
 def register_view(request):
     if request.method == 'POST':
@@ -85,31 +39,42 @@ def register_view(request):
 
 
 
+
+
+
 # def login_view(request):
-    # if request.method == 'POST':
-    #     form = AuthenticationForm(data=request.POST)
-    #     if form.is_valid():
-    #         user = form.get_user()
-    #         login(request, user)
-    #         return redirect('home')
-    # else:
-    #     form = AuthenticationForm()
+#     if request.user.is_authenticated:
+#         return redirect('home')
 
-    # return render(request, 'accounts/login.html', {'form': form})
+#     form = AuthenticationForm(request, data=request.POST or None)
 
+#     if request.method == 'POST':
+#         if form.is_valid():
+#             user = form.get_user()
+#             login(request, user)
+#             return redirect('home')
+#         else:
+#             messages.error(request, "Invalid username or password. Please try again.")
 
+#     return render(request, 'accounts/login.html', {'form': form})
 
 def login_view(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
-        if form.is_valid():
-            login(request, form.get_user())
-            return redirect('home')
-    else:
-        form = AuthenticationForm()
+    if request.user.is_authenticated:
+        return redirect('home')
 
+    form = AuthenticationForm(request, data=request.POST or None)
+
+    # Add Bootstrap classes
     for field in form.fields.values():
         field.widget.attrs['class'] = 'form-control'
+
+    if request.method == 'POST':
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, "Invalid username or password. Please try again.")
 
     return render(request, 'accounts/login.html', {'form': form})
 

@@ -1,9 +1,7 @@
 from django.contrib import admin
-from .models import Job,JobApplication
+from .models import Job, JobApplication
 
 
-
-# Register your models here.
 @admin.register(Job)
 class JobAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'employer', 'location', 'employment_type', 'created_at']
@@ -12,12 +10,10 @@ class JobAdmin(admin.ModelAdmin):
     list_display_links = ['title']
     readonly_fields = ['created_at']
 
-# ----------------------------
-# JobApplication Admin
-# ----------------------------
+
 @admin.register(JobApplication)
 class JobApplicationAdmin(admin.ModelAdmin):
-    list_display = ['id', 'job', 'applicant', 'applied_at']
+    list_display = ['id', 'job', 'applicant', 'status', 'applied_at']
     search_fields = ['job__title', 'applicant__user__username']
-    list_filter = ['applied_at', 'job']
+    list_filter = ['status', 'applied_at']
     readonly_fields = ['applied_at']

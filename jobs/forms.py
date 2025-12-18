@@ -21,7 +21,7 @@ class JobApplicationForm(forms.ModelForm):
             'degree',
             'passout_year',
             'dob',
-            'resume',
+            'resume_link',
             'cover_letter'
         ]
 
