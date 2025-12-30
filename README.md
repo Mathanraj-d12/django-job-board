@@ -1,65 +1,55 @@
-💼 Job Board Web Application
+# 💼 Job Board Web Application
 
-A full-stack Job Board Web Application built with Django, allowing employers to post jobs and job seekers to search and apply.
-Designed with clean UI, secure authentication, and deployed on Render.
+A full-stack **Job Board Web Application** built with **Django**, allowing employers to post jobs and job seekers to search and apply for jobs.  
+Designed with a clean UI, secure authentication, and deployed on **Render**.
 
-🔗 Live Demo:
-👉 https://django-job-board-4ja4.onrender.com/
+🔗 **Live Demo**  
+👉 [https://django-job-board-4ja4.onrender.com/](https://django-job-board-4ja4.onrender.com/)
 
-🚀 Features
+---
 
-User authentication (Login & Register)
+## 🚀 Features
 
-Employer & Job Seeker role-based access
+- User authentication (Login & Register)
+- Employer & Job Seeker role-based access
+- Company creation and management
+- Job posting and job listing
+- Job search and browsing
+- Job application workflow
+- Django Admin dashboard
+- Secure forms with CSRF protection
+- Responsive UI with HTML & CSS
 
-Company creation and management
+---
 
-Job posting and job listing
+## 🛠️ Tech Stack
 
-Job search and browsing
+### Backend
+- Django (Python Web Framework)
+- Django ORM
 
-Job application workflow
+### Frontend
+- HTML5
+- CSS3
+- Bootstrap
 
-Django Admin dashboard
+### Database
+- SQLite (Development)
+- PostgreSQL (Production – Render)
 
-Secure forms with CSRF protection
+### Authentication
+- Django Authentication System
 
-Responsive UI with HTML & CSS
+### Deployment
+- Render (Web Service Hosting)
+- Gunicorn (WSGI Server)
 
-🛠️ Tech Stack
-Backend
+---
 
-Django (Python Web Framework)
+## 📂 Project Structure
 
-Django ORM
-
-Frontend
-
-HTML5
-
-CSS3
-
-Bootstrap
-
-Database
-
-SQLite (Development)
-
-PostgreSQL (Production – Render)
-
-Authentication
-
-Django Authentication System
-
-Deployment
-
-Render (Web Service Hosting)
-
-Gunicorn (WSGI Server)
-
-📂 Project Structure
+```text
 django-job-board/
-│
 ├── accounts/        # User authentication & roles
 ├── companies/       # Company & job posting logic
 ├── applications/    # Job application handling
@@ -69,6 +59,7 @@ django-job-board/
 ├── manage.py
 └── requirements.txt
 
+
 ⚙️ Installation & Setup (Local)
 1️⃣ Clone the repository
 git clone https://github.com/Mathanraj-d12/django-job-board.git
@@ -77,15 +68,14 @@ cd django-job-board
 2️⃣ Create virtual environment
 python -m venv .venv
 
-
 Activate virtual environment
 
-Windows:
+Windows
 
 .venv\Scripts\activate
 
 
-Mac/Linux:
+Mac / Linux
 
 source .venv/bin/activate
 
@@ -107,3 +97,8 @@ This is a hosting limitation, not a project issue.
 📌 Resume Description
 
 Developed a Job Board Web Application using Django with role-based authentication, job posting, job search, and application management features. Deployed on Render with a production-ready configuration.
+
+👨‍💻 Author
+
+Mathan Raj
+GitHub: https://github.com/Mathanraj-d12
